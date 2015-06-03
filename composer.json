@@ -1,0 +1,12 @@
+{
+    "name": "webgriffe/catalog-helper-extension",
+    "type": "magento-module",
+    "license":"MIT",
+    "description":"Magento extension. Adds useful method to be used in catalog install/upgrade scripts.",
+    "authors":[
+        {
+            "name":"Webgriffe SRL",
+            "email":"support@webgriffe.com"
+        }
+    ]
+}

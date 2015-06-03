@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Webgriffe_CatalogHelper>
+            <version>1.0.0</version>
+        </Webgriffe_CatalogHelper>
+    </modules>
+    <global>
+        <models>
+            <webgriffe_cataloghelper>
+                <class>Webgriffe_CatalogHelper_Model</class>
+                <resourceModel>webgriffe_cataloghelper_resource</resourceModel>
+            </webgriffe_cataloghelper>
+            <webgriffe_cataloghelper_resource>
+                <class>Webgriffe_CatalogHelper_Model_Resource</class>
+            </webgriffe_cataloghelper_resource>
+        </models>
+        <blocks>
+            <webgriffe_cataloghelper>
+                <class>Webgriffe_CatalogHelper_Block</class>
+            </webgriffe_cataloghelper>
+        </blocks>
+        <helpers>
+            <webgriffe_cataloghelper>
+                <class>Webgriffe_CatalogHelper_Helper</class>
+            </webgriffe_cataloghelper>
+        </helpers>
+        <resources>
+            <webgriffe_cataloghelper_setup>
+                <setup>
+                    <module>Webgriffe_CatalogHelper</module>
+                </setup>
+            </webgriffe_cataloghelper_setup>
+        </resources>
+    </global>
+</config>
