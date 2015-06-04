@@ -46,6 +46,23 @@ class Webgriffe_CatalogHelper_Model_Entity_Setup extends Mage_Eav_Model_Entity_S
      * Creates product Attribute with supplied data and adds the attribute to the specified Attribute Group. If the
      * group doesn't exists it will be created in the specified Attribute Set.
      *
+     * Possible attribute data are:
+     *
+     * 'backend_model'   => $this->_getValue($attr, 'backend'),
+     * 'backend_type'    => $this->_getValue($attr, 'type', 'varchar'),
+     * 'backend_table'   => $this->_getValue($attr, 'table'),
+     * 'frontend_model'  => $this->_getValue($attr, 'frontend'),
+     * 'frontend_input'  => $this->_getValue($attr, 'input', 'text'),
+     * 'frontend_label'  => $this->_getValue($attr, 'label'),
+     * 'frontend_class'  => $this->_getValue($attr, 'frontend_class'),
+     * 'source_model'    => $this->_getValue($attr, 'source'),
+     * 'is_required'     => $this->_getValue($attr, 'required', 1),
+     * 'is_user_defined' => $this->_getValue($attr, 'user_defined', 0),
+     * 'default_value'   => $this->_getValue($attr, 'default'),
+     * 'is_unique'       => $this->_getValue($attr, 'unique', 0),
+     * 'note'            => $this->_getValue($attr, 'note'),
+     * 'is_global'       => $this->_getValue($attr, 'global', 1),
+     *
      * @param string $attributeCode
      * @param string $attributeGroupName
      * @param string $attributeSetName
@@ -94,9 +111,18 @@ class Webgriffe_CatalogHelper_Model_Entity_Setup extends Mage_Eav_Model_Entity_S
      */
     protected function _createProductAttribute($attributeCode, $attributeData)
     {
+        if (!isset($attributeData['type']) && isset($attributeData['input'])) {
+            $attributeData['type'] = $this->_getBackendTypeFromInput($attributeData['input']);
+        }
         $attributeData = array_merge($attributeData, array('user_defined' => '1'));
         $this->addAttribute($this->_getProductEntityTypeId(), $attributeCode, $attributeData);
         $this->updateAttribute($this->_getProductEntityTypeId(), $attributeCode, 'is_user_defined', '0');
+    }
+
+    protected function _getBackendTypeFromInput($input)
+    {
+        $attributeModel = Mage::getModel('eav/entity_attribute');
+        return $attributeModel->getBackendTypeByInput($input);
     }
 }
 
