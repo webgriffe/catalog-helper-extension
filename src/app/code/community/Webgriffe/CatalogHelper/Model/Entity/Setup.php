@@ -114,6 +114,14 @@ class Webgriffe_CatalogHelper_Model_Entity_Setup extends Mage_Eav_Model_Entity_S
         if (!isset($attributeData['type']) && isset($attributeData['input'])) {
             $attributeData['type'] = $this->_getBackendTypeFromInput($attributeData['input']);
         }
+        if ($attributeData['input'] == 'select' &&
+            (!isset($attributeData['source_model']) || is_null($attributeData['source_model']))) {
+            $attributeData['source_model'] = 'eav/entity_attribute_source_table';
+        }
+        if ($attributeData['input'] == 'multiselect' &&
+            (!isset($attributeData['backend_model']) || is_null($attributeData['backend_model']))) {
+            $attributeData['backend_model'] = 'eav/entity_attribute_backend_array';
+        }
         $attributeData = array_merge($attributeData, array('user_defined' => '1'));
         $this->addAttribute($this->_getProductEntityTypeId(), $attributeCode, $attributeData);
         $this->updateAttribute($this->_getProductEntityTypeId(), $attributeCode, 'is_user_defined', '0');
@@ -121,8 +129,6 @@ class Webgriffe_CatalogHelper_Model_Entity_Setup extends Mage_Eav_Model_Entity_S
 
     protected function _getBackendTypeFromInput($input)
     {
-        $attributeModel = Mage::getModel('eav/entity_attribute');
-        return $attributeModel->getBackendTypeByInput($input);
+        return Mage::getModel('eav/entity_attribute')->getBackendTypeByInput($input);
     }
 }
-
