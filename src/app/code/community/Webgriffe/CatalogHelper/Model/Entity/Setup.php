@@ -6,7 +6,7 @@
  * Time: 15:40
  */
 
-class Webgriffe_CatalogHelper_Model_Entity_Setup extends Mage_Eav_Model_Entity_Setup
+class Webgriffe_CatalogHelper_Model_Entity_Setup extends Mage_Catalog_Model_Resource_Setup
 {
     /**
      * Creates an Attribute Set initialized from "Default" Attribute Set.
@@ -128,8 +128,13 @@ class Webgriffe_CatalogHelper_Model_Entity_Setup extends Mage_Eav_Model_Entity_S
             (!isset($attributeData['source_model']) || is_null($attributeData['source_model']))) {
             $attributeData['source'] = 'eav/entity_attribute_source_boolean';
         }
+
+        //Avoids Magento's behavior that associates an attribute to all attribute sets
         $attributeData = array_merge($attributeData, array('user_defined' => '1'));
+
         $this->addAttribute($this->_getProductEntityTypeId(), $attributeCode, $attributeData);
+
+        //Sets the attribute to "not user defined" as desired
         $this->updateAttribute($this->_getProductEntityTypeId(), $attributeCode, 'is_user_defined', '0');
     }
 
