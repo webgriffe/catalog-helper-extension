@@ -117,15 +117,15 @@ class Webgriffe_CatalogHelper_Model_Entity_Setup extends Mage_Catalog_Model_Reso
             $attributeData['type'] = $this->_getBackendTypeFromInput($attributeData['input']);
         }
         if ($attributeData['input'] == 'select' &&
-            (!isset($attributeData['source_model']) || is_null($attributeData['source_model']))) {
+            (!isset($attributeData['source']) || is_null($attributeData['source']))) {
             $attributeData['source'] = 'eav/entity_attribute_source_table';
         }
         if ($attributeData['input'] == 'multiselect' &&
-            (!isset($attributeData['backend_model']) || is_null($attributeData['backend_model']))) {
+            (!isset($attributeData['backend']) || is_null($attributeData['backend']))) {
             $attributeData['backend'] = 'eav/entity_attribute_backend_array';
         }
         if ($attributeData['input'] == 'boolean' &&
-            (!isset($attributeData['source_model']) || is_null($attributeData['source_model']))) {
+            (!isset($attributeData['source']) || is_null($attributeData['source']))) {
             $attributeData['source'] = 'eav/entity_attribute_source_boolean';
         }
 
