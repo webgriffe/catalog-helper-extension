@@ -15,6 +15,8 @@ class Webgriffe_CatalogHelper_Model_Entity_Setup extends Mage_Catalog_Model_Reso
      * @param string $attributeSetName
      * @param $sortOrder
      * @return Mage_Eav_Model_Entity_Attribute_Set
+     * @throws Mage_Core_Exception
+     * @throws Exception
      */
     public function createProductAttributeSetFromDefault($attributeSetName, $sortOrder = null)
     {
@@ -67,6 +69,7 @@ class Webgriffe_CatalogHelper_Model_Entity_Setup extends Mage_Catalog_Model_Reso
      * @param string $attributeGroupName
      * @param string $attributeSetName
      * @param array $attributeData
+     * @throws Mage_Core_Exception
      */
     public function createProductAttributeWithGroup(
         $attributeCode,
@@ -92,6 +95,21 @@ class Webgriffe_CatalogHelper_Model_Entity_Setup extends Mage_Catalog_Model_Reso
     }
 
     /**
+     * Replacement for Mage_Eav_Model_Entity_Setup::addAttribute which adds attribute only if not it already exists.
+     * @param $entityTypeId
+     * @param $code
+     * @param array $attr
+     * @throws Mage_Core_Exception
+     */
+    public function createProductAttributeIfNotExists($code, array $attr)
+    {
+        if ($this->getAttributeId($this->_getProductEntityTypeId(), $code)) {
+            return;
+        }
+        $this->_createProductAttribute($code, $attr);
+    }
+
+    /**
      * @return int
      * @throws Mage_Core_Exception
      */
@@ -100,9 +118,14 @@ class Webgriffe_CatalogHelper_Model_Entity_Setup extends Mage_Catalog_Model_Reso
         return $this->getEntityTypeId(Mage_Catalog_Model_Product::ENTITY);
     }
 
+    /**
+     * @param $attributeSetName
+     * @return int
+     * @throws Mage_Core_Exception
+     */
     private function _getProductAttributeSetId($attributeSetName)
     {
-        return $this->getAttributeSet($this->_getProductEntityTypeId(), $attributeSetName, 'attribute_set_id');
+        return (int)$this->getAttributeSet($this->_getProductEntityTypeId(), $attributeSetName, 'attribute_set_id');
     }
 
     /**
@@ -110,22 +133,23 @@ class Webgriffe_CatalogHelper_Model_Entity_Setup extends Mage_Catalog_Model_Reso
      *
      * @param $attributeCode
      * @param $attributeData
+     * @throws Mage_Core_Exception
      */
     protected function _createProductAttribute($attributeCode, $attributeData)
     {
         if (!isset($attributeData['type']) && isset($attributeData['input'])) {
             $attributeData['type'] = $this->_getBackendTypeFromInput($attributeData['input']);
         }
-        if ($attributeData['input'] == 'select' &&
-            (!isset($attributeData['source']) || is_null($attributeData['source']))) {
+        if ($attributeData['input'] === 'select' &&
+            (!isset($attributeData['source']) || null === $attributeData['source'])) {
             $attributeData['source'] = 'eav/entity_attribute_source_table';
         }
-        if ($attributeData['input'] == 'multiselect' &&
-            (!isset($attributeData['backend']) || is_null($attributeData['backend']))) {
+        if ($attributeData['input'] === 'multiselect' &&
+            (!isset($attributeData['backend']) || null === $attributeData['backend'])) {
             $attributeData['backend'] = 'eav/entity_attribute_backend_array';
         }
-        if ($attributeData['input'] == 'boolean' &&
-            (!isset($attributeData['source']) || is_null($attributeData['source']))) {
+        if ($attributeData['input'] === 'boolean' &&
+            (!isset($attributeData['source']) || null === $attributeData['source'])) {
             $attributeData['source'] = 'eav/entity_attribute_source_boolean';
         }
 
